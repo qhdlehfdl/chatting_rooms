@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Chat App</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+  </head>
+  <body>
+    <main style="text-align: center">
+      <h1><%=room.roomName%></h1>
+      <div hidden="true" id="roomID" data-roomid="<%=room.id%>"></div>
+
+      <form>
+        <ul id="chat">
+          <%if(messages){
+            messages.forEach((message)=>{ %>
+              <li><%=message.userId%> : <%=message.message%></li>
+            <%});
+          }%>
+        </ul>
+      </form>
+
+      <form id="form">
+        <input id="msg" autocomplete="off" />
+        <button type="submit">Send</button>
+      </form>
+
+      <button id="exit">Exit Room</button>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      const socket = io();
+      const id="<%=user.id%>";
+      const userId="<%=user.userId%>";
+      const roomId="<%=room.id%>";
+
+      socket.emit("join_room", {
+        id: parseInt(id),
+        userId: userId,
+        roomId: parseInt(roomId),
+      });
+
+      $("form").submit(function () {
+        socket.emit("send_message", {
+          id: parseInt(id),
+          userId: userId,
+          roomId: parseInt(roomId),
+          message: $("#msg").val(),
+        });
+        $("#msg").val("");
+        return false;
+      });
+
+      $("#exit").click(() => {
+        
+        if(confirm("정말 나가시겠습니까? 대화내용이 삭제됩니다.")){
+          socket.emit("exit_room", {
+          id:parseInt(id),
+          userId:userId,
+          roomId:parseInt(roomId),
+        });
+
+        location.href='/room';
+        }
+      });
+
+      socket.on("enter_message", (msg) => {
+        $("#chat").append($("<li>").text(msg));
+      });
+
+      socket.on("return_message", (data) => {
+        const { id, userId, message } = data;
+        $("#chat").append($("<li>").text(userId + ' : ' + message));
+      });
+    </script>
+  </body>
+</html>

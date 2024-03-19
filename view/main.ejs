@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Chat App</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+  </head>
+  <body>
+    <main>
+      <% if(!user){ %>
+      <form action="/login_process" method="post">
+        <input
+          type="text"
+          placeholder="id"
+          name="id"
+          maxlength="20"
+          style="width: 50%"
+        />
+        <input
+          type="password"
+          placeholder="password"
+          name="password"
+          maxlength="20"
+          style="width: 50%"
+        />
+        <input type="submit" value="login" />
+        <div><a href="/join">join</a></div>
+      </form>
+      <% } else{ %>
+
+      <button onclick="location.href='/logout_process'">logout</button>
+      <button onclick="location.href='/room'">enter room</button>
+
+      <% } %>
+    </main>
+  </body>
+</html>

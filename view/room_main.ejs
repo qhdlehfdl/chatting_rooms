@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realtime Chat App</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+  </head>
+  <body>
+    <main>
+      <%rooms.forEach(function(room) { %>
+      <button
+        class="roomButton"
+        data-roomid="<%=room.id%>"
+        onclick="location.href='/room/show_room?id=<%=room.id%>'">
+        <%=room.roomName%>
+      </button>
+
+      <%});%>
+    </main>
+
+    <footer style="text-align: center">
+      <a href="/room/create">create room</a>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </body>
+</html>
